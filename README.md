@@ -1,2 +1,0 @@
-# Warcaby
-Warcaby Python
