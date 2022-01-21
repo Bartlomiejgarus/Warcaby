@@ -16,8 +16,10 @@ def dajPozycjeZMyszki(pos):
     :return:
     '''
     x, y = pos
-    row = y // WielkoscKwadratu
-    col = x // WielkoscKwadratu
+    #Wyrazenie lam przydatne do przeliczania pozycji myszki na row i col
+    lamOblicz = lambda w: w // WielkoscKwadratu
+    row = lamOblicz(y)  #y // WielkoscKwadratu
+    col = lamOblicz(x)  #x // WielkoscKwadratu
     return row, col
 
 

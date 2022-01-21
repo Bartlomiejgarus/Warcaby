@@ -54,9 +54,12 @@ class Gra:
         '''
         resetrect = WYGRANA_RESET if self.szachownica.iloscczarnych <= 0 or self.szachownica.iloscbialych <= 0 else RESET_W_TRAKCIE
         pygamerect = pygame.Rect(resetrect[0], resetrect[1], resetrect[2], resetrect[3])
-        if pygamerect.collidepoint(pozycjamyszy):
-            self._inicjacja()
-            return True
+        try:
+            if pygamerect.collidepoint(pozycjamyszy):
+                self._inicjacja()
+                return True
+        except:
+            print("błąd resetu")
         return False
 
     def wybierz(self, row, col):
@@ -68,13 +71,16 @@ class Gra:
         :param col: kolumny
         :return:
         '''
-        if self.wybrana:
-            wynik = self.ruch(row, col)
-            if not wynik:
-                self.wybrana = None
-                self.wybierz(row, col)
+        try:
+            if self.wybrana:
+                wynik = self.ruch(row, col)
+                if not wynik:
+                    self.wybrana = None
+                    self.wybierz(row, col)
 
-        pionek = self.szachownica.dajpionka(row, col)
+            pionek = self.szachownica.dajpionka(row, col)
+        except:
+            print("Nie udalo sie wybrac pionka")
         if pionek != 0 and pionek.color == self.tura:
             self.wybrana = pionek
             self.dozwoloneruchy = self.szachownica.dajdozwoloneruchy(pionek)
@@ -108,9 +114,12 @@ class Gra:
         Metoda rysuje dozowolne ruchy na podstawie ruchow
         :param ruchy:
         '''
-        for ruch in ruchy:
-            row, col = ruch
-            pygame.draw.circle(self.win, BLUE, (col * WielkoscKwadratu + WielkoscKwadratu // 2, row * WielkoscKwadratu + WielkoscKwadratu // 2), 15)
+        try:
+            for ruch in ruchy:
+                row, col = ruch
+                pygame.draw.circle(self.win, BLUE, (col * WielkoscKwadratu + WielkoscKwadratu // 2, row * WielkoscKwadratu + WielkoscKwadratu // 2), 15)
+        except:
+            "Nie udało się wyznaczyc dozwolonych ruchow"
 
     def zmienture(self):
         '''

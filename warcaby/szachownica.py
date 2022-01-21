@@ -30,6 +30,7 @@ class Szachownica:
         Metoda rysujaca kwadraty na szachownicy 8 x 8
         :param win: Okno na ktorym wyswietlana jest gra
         '''
+
         #wypełnia plasze na czarno
         win.fill(BLACK)
         #Rysuje zielone pola tak zeby wygladalo to jak szachownica
@@ -42,21 +43,28 @@ class Szachownica:
         Metoda ktora tworz szachownice dla logiki czyli
         wypelnia liste szachownica
         '''
+        #wyraznienia lam przydatne do tworzenia pionkow lub pola bez nich
+        lamDodajPion = lambda r, c, kol: self.szachownica[r].append(Pionek(r, c, kol))
+        lamDodajPustePole = lambda r: self.szachownica[r].append(0)
         for row in range(ROWS):
             self.szachownica.append([])
             for col in range(COLS):
                 if col % 2 == ((row + 1)%2):
                     if row < 3:
                         #Pionek CZARNY
-                        self.szachownica[row].append(Pionek(row, col, BLACKGREY))
+                        #self.szachownica[row].append(Pionek(row, col, BLACKGREY))
+                        lamDodajPion(row,col,BLACKGREY)
                     elif row > 4:
                         #PIONEK BIALY
-                        self.szachownica[row].append(Pionek(row, col, WHITE))
+                        #self.szachownica[row].append(Pionek(row, col, WHITE))
+                        lamDodajPion(row, col, WHITE)
                     else:
                         #PUSTE POLE
-                        self.szachownica[row].append(0)
+                        #self.szachownica[row].append(0)
+                        lamDodajPustePole(row)
                 else:
-                    self.szachownica[row].append(0)
+                    #self.szachownica[row].append(0)
+                    lamDodajPustePole(row)
 
 
     def dajpionka(self, row, col):
@@ -118,15 +126,18 @@ class Szachownica:
         :return: Narysowany przycisk resetu
         '''
         #Jesli kots wygral:
-        if self.iloscbialych <=0 or self.iloscczarnych <=0:
-            #Rysuje duzy przycisk resestu
-            pygame.draw.rect(win, RED, WYGRANA_RESET)
-            font = pygame.font.Font(pygame.font.get_default_font(), 20)
-            text = font.render(self.wygral() + "Click to RESET", False, WHITE)
-            win.blit(text, (WYGRANA_RESET[0], WYGRANA_RESET[1]))
-        else:
-            #Inaczej rysuje w lewym gornym rogu
-            pygame.draw.rect(win, RED, RESET_W_TRAKCIE)
+        try:
+            if self.iloscbialych <=0 or self.iloscczarnych <=0:
+                #Rysuje duzy przycisk resestu
+                pygame.draw.rect(win, RED, WYGRANA_RESET)
+                font = pygame.font.Font(pygame.font.get_default_font(), 20)
+                text = font.render(self.wygral() + "Click to RESET", False, WHITE)
+                win.blit(text, (WYGRANA_RESET[0], WYGRANA_RESET[1]))
+            else:
+                #Inaczej rysuje w lewym gornym rogu
+                pygame.draw.rect(win, RED, RESET_W_TRAKCIE)
+        except:
+            print("Nie udało się narysować przycisku resetu")
 
 
     def remove(self, pioneki):
@@ -209,7 +220,7 @@ class Szachownica:
 
                 if last:
                     if step == -1:
-                        row = max(r - 3, 0)
+                        row = max(r - 3, -1)
                     else:
                         row = min(r + 3, ROWS)
                     ruchy.update(self._trasaPoLewej(r + step, row, step, color, lewo - 1, pomin=last))
@@ -253,7 +264,7 @@ class Szachownica:
 
                 if last:
                     if step == -1:
-                        row = max(r - 3, 0)
+                        row = max(r - 3, -1)
                     else:
                         row = min(r + 3, ROWS)
                     ruchy.update(self._trasaPoLewej(r + step, row, step, color, prawo - 1, pomin=last))

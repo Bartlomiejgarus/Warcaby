@@ -16,7 +16,8 @@ ROWS = 8
 COLS = 8
 
 #Wielkosc jednego pola na szachownicy jest to dlugosc okna podzielona przez ilosc takich pol w columnie
-WielkoscKwadratu = WIDTH // COLS
+lamWielkoscKwadratu = lambda x,y: x//y
+WielkoscKwadratu = lamWielkoscKwadratu(WIDTH,COLS)    #WIDTH // COLS
 
 #kolory
 #Są one wyliczne na podstawie plety RGB RED GREEN BLUE
